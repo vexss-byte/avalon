@@ -83,6 +83,7 @@ public final class GameManager {
     private final boolean[] results = new boolean[3];
     private ServerBossBar bar;
     private long tickCounter;
+    private boolean portalTestOnly;
 
     private GameManager(MinecraftServer server) {
         this.server = server;
@@ -147,8 +148,9 @@ public final class GameManager {
     public String startGame() {
         if (phase != Phase.LOBBY) return "Game sedang berjalan.";
         List<ServerPlayerEntity> ps = new ArrayList<>(server.getPlayerManager().getPlayerList());
-        if (ps.size() < Math.max(2, cfg().minPlayers))
-            return "Pemain kurang. Minimal " + Math.max(2, cfg().minPlayers) + " (ubah minPlayers di config/avalon.json).";
+        int minNeeded = cfg().soloTest ? 1 : Math.max(2, cfg().minPlayers);
+        if (ps.size() < minNeeded)
+            return "Pemain kurang. Minimal " + minNeeded + " (atur minPlayers / soloTest di config/avalon.json).";
         if (ps.size() > cfg().maxPlayers) return "Pemain terlalu banyak. Maksimal " + cfg().maxPlayers + ".";
         ServerWorld arena = Arena.world(server);
         if (arena == null) return "Dimensi avalon:arena tidak ditemukan (apakah mod terpasang di server?).";
@@ -181,6 +183,7 @@ public final class GameManager {
     }
 
     private void resetState() {
+        portalTestOnly = false;
         order.clear();
         roles.clear();
         ejected.clear();
@@ -344,7 +347,29 @@ public final class GameManager {
     // ------------------------------------------------------------------ phases
     private void onPortalDone() {
         mission.returnAllToHall(this);
+        if (portalTestOnly) {
+            // Portal test: show the Hall for 5 seconds, then everything is cleaned up.
+            phase = Phase.ENDED;
+            ticksLeft = 100;
+            return;
+        }
         enterRoleIntro();
+    }
+
+    /** Plays only the intro portal (gate + pull animation) for one player. No roles, no game. */
+    public String startPortalTest(ServerPlayerEntity p) {
+        if (phase != Phase.LOBBY) return "Game sedang berjalan.";
+        ServerWorld arena = Arena.world(server);
+        if (arena == null) return "Dimensi avalon:arena tidak ditemukan.";
+        resetState();
+        order.add(p.getUuid());
+        names.put(p.getUuid(), p.getName().getString());
+        portalTestOnly = true;
+        p.getInventory().clear();
+        p.changeGameMode(GameMode.ADVENTURE);
+        phase = Phase.PORTAL_INTRO;
+        portal.begin(this, Arena.lobbyWorld(server), Arena.lobbyPos());
+        return null;
     }
 
     private void enterRoleIntro() {
@@ -599,6 +624,10 @@ public final class GameManager {
             if (r != null && r.evil()) continue;      // the assassin already knows his team
             ids.add(p.getUuid());
             ns.add(p.getName().getString());
+        }
+        if (ids.isEmpty()) {
+            endGame(true, "(Tes solo) tidak ada kandidat Merlin untuk ditebak.");
+            return;
         }
         ServerPlayNetworking.send(ap, new OpenSelectPayload(OpenSelectPayload.MODE_ASSASSIN, "Tebak Merlin",
                 "Satu kesempatan. Jika salah, kubu baik menang.", 1, false, cfg().assassinSeconds, ids, ns));

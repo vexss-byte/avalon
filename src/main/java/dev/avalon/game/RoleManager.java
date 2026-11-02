@@ -38,6 +38,14 @@ public final class RoleManager {
         for (int i = 0; i < evil; i++) {
             g.roles.put(shuffled.get(idx++), EVIL_ORDER[Math.min(i, EVIL_ORDER.length - 1)]);
         }
+        String dbg = dev.avalon.AvalonConfig.get().debugRole;
+        if (dbg != null && !dbg.isBlank() && !shuffled.isEmpty()) {
+            try {
+                g.roles.put(shuffled.get(0), Role.valueOf(dbg.trim().toUpperCase()));
+            } catch (IllegalArgumentException ignored) {
+                dev.avalon.AvalonMod.LOGGER.warn("debugRole '{}' is not a valid role", dbg);
+            }
+        }
     }
 
     public int evilTotal(GameManager g) {

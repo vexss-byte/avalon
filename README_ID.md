@@ -22,6 +22,11 @@ Mod game sosial-deduksi (gaya Avalon): 1 map, 1 Discussion Hall, 3 Pilar, 4 bate
    (`[Skip]` / `/avalon skip`, Lady of the Lake) -> voting tebak kubu jahat -> ronde berikut.
 5. Perintah lain: `/avalon stop`, `/avalon status`, `/avalon reload`, `/avalon menu` (buka ulang layar yang tertutup).
 
+## Tes sendirian
+- `/avalon testportal` : memutar gerbang portal + animasi tarik (PAL) untuk kamu sendiri, lalu menampilkan Hall 5 detik. Tanpa game.
+- Tes game penuh solo: di `config/avalon.json` set `"soloTest": true` dan `"debugRole": "ASSASSIN"` (atau MERLIN, MORGANA, dst), `/avalon reload`, lalu `/avalon start`.
+  Dengan 1 pemain, tebak-kubu-jahat dilewati dan fase Assassin tidak punya kandidat, jadi dipakai terutama untuk menguji misi, baterai, dan sabotase.
+
 ## Aturan yang diimplementasi (sesuai jawabanmu)
 - Tim 3, 4, 4. Voting ditolak 5x berturut-turut = kubu jahat menang.
 - Kubu jahat mengambil baterai yang SAMA dari gudang. Hanya mereka melihat hint hotbar "Klik kanan untuk sabotase".

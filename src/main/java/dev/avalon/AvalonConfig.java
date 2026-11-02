@@ -13,6 +13,12 @@ public final class AvalonConfig {
     private static final Gson GSON = new GsonBuilder().setPrettyPrinting().create();
     private static AvalonConfig instance = new AvalonConfig();
 
+    // ---- testing ----
+    /** Allows /avalon start with a single player (for solo testing). */
+    public boolean soloTest = false;
+    /** Forces the first player's role while testing, e.g. "ASSASSIN", "MERLIN", "MORGANA". Empty = off. */
+    public String debugRole = "";
+
     // ---- players / rules ----
     public int minPlayers = 5;
     public int maxPlayers = 10;

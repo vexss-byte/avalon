@@ -33,6 +33,18 @@ public final class AvalonCommands {
                             ctx.getSource().sendFeedback(() -> Text.literal("Avalon dimulai!").formatted(Formatting.GOLD), true);
                             return 1;
                         }))
+                .then(CommandManager.literal("testportal")
+                        .requires(s -> s.hasPermissionLevel(2))
+                        .executes(ctx -> {
+                            GameManager g = GameManager.get();
+                            String err = g == null ? "Game manager belum siap." : g.startPortalTest(ctx.getSource().getPlayerOrThrow());
+                            if (err != null) {
+                                ctx.getSource().sendError(Text.literal(err));
+                                return 0;
+                            }
+                            ctx.getSource().sendFeedback(() -> Text.literal("Tes portal dimulai..."), false);
+                            return 1;
+                        }))
                 .then(CommandManager.literal("stop")
                         .requires(s -> s.hasPermissionLevel(2))
                         .executes(ctx -> {
