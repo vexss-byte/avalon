@@ -1,0 +1,13 @@
+{
+  "type": "avalon:arena",
+  "generator": {
+    "type": "minecraft:flat",
+    "settings": {
+      "biome": "avalon:corrupted",
+      "lakes": false,
+      "features": false,
+      "layers": [],
+      "structure_overrides": []
+    }
+  }
+}

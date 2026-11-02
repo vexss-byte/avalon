@@ -1,0 +1,6 @@
+{
+  "variants": {
+    "installed=false": { "model": "avalon:block/battery_socket_empty" },
+    "installed=true":  { "model": "avalon:block/battery_socket_full" }
+  }
+}

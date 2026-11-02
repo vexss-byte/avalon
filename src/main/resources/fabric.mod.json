@@ -1,0 +1,22 @@
+{
+  "schemaVersion": 1,
+  "id": "avalon",
+  "version": "${version}",
+  "name": "AVALON: The Forgotten Kingdom",
+  "description": "Social-deduction game for Minecraft: one map, one Discussion Hall, three Pillars, four batteries each.",
+  "authors": ["Avalon Team"],
+  "license": "MIT",
+  "environment": "*",
+  "entrypoints": {
+    "main": ["dev.avalon.AvalonMod"],
+    "client": ["dev.avalon.client.AvalonClient"]
+  },
+  "depends": {
+    "fabricloader": ">=0.17.3",
+    "minecraft": "~1.21.1",
+    "java": ">=21",
+    "fabric-api": "*",
+    "azurelib": ">=3.2.4",
+    "player_animation_library": "*"
+  }
+}
