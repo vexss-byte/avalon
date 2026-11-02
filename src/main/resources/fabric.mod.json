@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
   "id": "avalon",
-  "version": "${version}",
+  "version": "0.1.0",
   "name": "AVALON: The Forgotten Kingdom",
   "description": "Social-deduction game for Minecraft: one map, one Discussion Hall, three Pillars, four batteries each.",
   "authors": ["Avalon Team"],
